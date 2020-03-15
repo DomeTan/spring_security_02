@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>登录界面(初识SpringSecurity)</title>
+	</head>
+	<body>
+		<div id="login-form">
+			<div>
+				<label>账户:</label>
+				<input type="text" name="username" id="username" />
+			</div>
+			<div>
+				<label>密码:</label>
+				<input type="password" name="password" id="password"  />
+			</div>
+			<div>
+				<input name="wam_remember_me" title="记住我" type="checkbox" value="true" >
+				<span>记住我</span>
+			</div>
+			<div style="display: inline;">
+				<input type="text" name="vercode" id="vercode" placeholder="图形验证码" style="width: 6.25rem;height:2.125rem;">
+				
+			</div>
+			<div style="display: inline; margin-top: 0.625rem;">
+				<img th:src="@{/public/base/img/code.jpg}" style="width: 6.25rem;height:2.125rem;">
+			</div>
+			<div>
+				<button id="submit" onclick="login()">登 录</button>
+			</div>
+		</div>
+		<script type="application/javascript" th:src="@{/public/base/js/jquery-3.2.1.min.js}"></script>
+		<script>
+			function login() {
+				var username = $("#username").val();
+				var password = $("#password").val();
+				var wam_remember_me = $('input[name="wam_remember_me"]:checked').val();
+				$.ajax({
+					url : "/api/v1/login",
+					method : "POST",
+					dataType : "JSON",
+					data : {
+						username : username,
+						password : password,
+						wam_remember_me: wam_remember_me // remember me
+					},
+					success: function (result) {
+						location.href = result['redirect'];
+					},
+					error: function (event) {
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

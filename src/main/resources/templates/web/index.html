@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<meta charset="utf-8">
+		<title>登录成功访问的第一个界面</title>
+	</head>
+	<body>
+		<h1>登录成功访问的第一个界面</h1>
+		<button onclick="logout()">退出登录</button>
+		<ul>
+			<li sec:authorize="hasAuthority('WAM_ADMIN')">
+				<a th:href="@{/admin}" >ADMIN角色可访问</a>
+			</li>
+			<li sec:authorize="hasAuthority('WAM_USER')">
+				<a th:href="@{/user}" >USER角色可访问</a>
+
+			</li>
+			<li sec:authorize="hasAnyAuthority('WAM_ADMIN','WAM_USER')">
+				<a th:href="@{/common}" >COMMON角色可访问</a>
+			</li>
+		</ul>
+	</body>
+	<script type="application/javascript" th:src="@{/public/base/js/jquery-3.2.1.min.js}"></script>
+	<script>
+		function logout() {
+			$.ajax({
+				url: "/api/v1/logout",
+				method: 'POST',
+				success: function (result) {
+					location.href = result['redirect'];
+				}
+			});
+		}
+	</script>
+</html>
